@@ -1,0 +1,63 @@
+// -*- mode:java; tab-width:2; c-basic-offset:2; intent-tabs-mode:nil; -*- ex: set tabstop=2 expandtab:
+
+// Pilot SR/SS/Twilight Hours (Pilot SR/SS)
+// Copyright (C) 2018 Cedric Dufour <http://cedric.dufour.name>
+//
+// Pilot SR/SS/Twilight Hours (Pilot SR/SS) is free software:
+// you can redistribute it and/or modify it under the terms of the GNU General
+// Public License as published by the Free Software Foundation, Version 3.
+//
+// Pilot SR/SS/Twilight Hours (Pilot SR/SS) is distributed in the hope that it
+// will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+//
+// See the GNU General Public License for more details.
+//
+// SPDX-License-Identifier: GPL-3.0
+// License-Filename: LICENSE/GPL-3.0.txt
+
+using Toybox.Application as App;
+using Toybox.WatchUi as Ui;
+
+// NOTE: Since Ui.Confirmation does not allow to pre-select "Yes" as an answer,
+//       let's us our own "confirmation" menu and save one key press
+class MenuLocationEditFromGPS extends Ui.Menu {
+
+  //
+  // FUNCTIONS: Ui.Menu (override/implement)
+  //
+
+  function initialize() {
+    Menu.initialize();
+    Menu.setTitle(Ui.loadResource(Rez.Strings.titleConfirm));
+    Menu.addItem(Lang.format("$1$ ?", [Ui.loadResource(Rez.Strings.titleLocationFromGPS)]), :confirm);
+  }
+
+}
+
+class MenuDelegateLocationEditFromGPS extends Ui.MenuInputDelegate {
+
+  //
+  // FUNCTIONS: Ui.MenuInputDelegate (override/implement)
+  //
+
+  function initialize() {
+    MenuInputDelegate.initialize();
+  }
+
+  function onMenuItem(item) {
+    if (item == :confirm and $.PH_oPositionLocation != null) {
+      // Update location (dictionary) with current location
+      var adLocation = $.PH_oPositionLocation.toDegrees();
+      var dictLocation = App.Storage.getValue("storLocPreset");
+      if(dictLocation == null) {
+        dictLocation = { "name" => "----", "latitude" => 0.0f, "longitude" => 0.0f };
+      }
+      dictLocation["name"] = Ui.loadResource(Rez.Strings.valueLocationGPS);
+      dictLocation["latitude"] = adLocation[0];
+      dictLocation["longitude"] = adLocation[1];
+      App.Storage.setValue("storLocPreset", dictLocation);
+    }
+  }
+
+}

@@ -1,0 +1,48 @@
+<!-- -*- mode:xml; tab-width:2; c-basic-offset:2; intent-tabs-mode:nil; -*- ex: set tabstop=2 expandtab: -->
+<strings>
+  <string id="AppName">Pilot SR/SS</string>
+  <string id="AppVersion">1.0.20180916a</string>
+  <!-- Properties -->
+  <string id="titleVersion">Version</string>
+  <string id="titleLicense">License</string>
+  <string id="titleAuthor">Author</string>
+  <!-- Menu (settings) -->
+  <string id="titleSettings">Settings</string>
+  <string id="titleBackgroundColor">Background Color</string>
+  <!-- Menu (location) -->
+  <string id="titleSettingsLocation">Location</string>
+  <string id="titleLocationAuto">Location Source</string>
+  <string id="titleLocationLoad">Load Location</string>
+  <string id="titleLocationEdit">Edit Location</string>
+  <string id="titleLocationSave">Save Location</string>
+  <string id="titleLocationDelete">Delete Location</string>
+  <string id="titleLocationFromGPS">From GPS</string>
+  <string id="titleLocationHeight">Height</string>
+  <!-- Menu (location edit) -->
+  <string id="titleLocationName">Name</string>
+  <string id="titleLocationLatitude">Latitude</string>
+  <string id="titleLocationLongitude">Longitude</string>
+  <!-- Menu (date/time) -->
+  <string id="titleSettingsDateTime">Date/Time</string>
+  <string id="titleDateAuto">Date Source</string>
+  <string id="titleDatePreset">Preset Date</string>
+  <string id="titleTimeUTC">Timezone</string>
+  <!-- Menu (about) -->
+  <string id="titleSettingsAbout">About</string>
+  <!-- Menu (confirm) -->
+  <string id="titleConfirm">Confirm</string>
+  <!-- Menu (values) -->
+  <string id="valueAuto">Auto</string>
+  <string id="valuePreset">Preset</string>
+  <string id="valueTimeLT">LT</string>
+  <string id="valueTimeUTC">UTC</string>
+  <string id="valueColorWhite">White</string>
+  <string id="valueColorBlack">Black</string>
+  <!-- Layouts -->
+  <string id="labelSunriseSunset">SR/SS</string>
+  <string id="labelCivilDawnDusk">Twilight</string>
+  <string id="labelLocation">Location</string>
+  <string id="labelHeight">Height</string>
+  <!-- Values -->
+  <string id="valueLocationGPS">GPS</string>
+</strings>
