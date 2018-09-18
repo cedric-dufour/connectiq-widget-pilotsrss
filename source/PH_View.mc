@@ -349,7 +349,7 @@ class PH_ViewDelegate extends Ui.BehaviorDelegate {
 
   function onMenu() {
     //Sys.println("DEBUG: PH_ViewDelegate.onMenu()");
-    Ui.pushView(new MenuSettings(), new MenuDelegateSettings(), Ui.SLIDE_IMMEDIATE);
+    Ui.pushView(new MenuSettings(), new MenuSettingsDelegate(), Ui.SLIDE_IMMEDIATE);
     return true;
   }
 

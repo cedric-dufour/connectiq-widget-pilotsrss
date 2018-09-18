@@ -41,7 +41,7 @@ class PickerDateAuto extends Ui.Picker {
 
 }
 
-class PickerDelegateDateAuto extends Ui.PickerDelegate {
+class PickerDateAutoDelegate extends Ui.PickerDelegate {
 
   //
   // FUNCTIONS: Ui.PickerDelegate (override/implement)

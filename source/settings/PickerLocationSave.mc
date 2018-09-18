@@ -53,7 +53,7 @@ class PickerLocationSave extends Ui.Picker {
 }
 
 (:memory_large)
-class PickerDelegateLocationSave extends Ui.PickerDelegate {
+class PickerLocationSaveDelegate extends Ui.PickerDelegate {
 
   //
   // FUNCTIONS: Ui.PickerDelegate (override/implement)

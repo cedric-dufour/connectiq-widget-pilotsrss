@@ -41,7 +41,7 @@ class PickerTimeUTC extends Ui.Picker {
 
 }
 
-class PickerDelegateTimeUTC extends Ui.PickerDelegate {
+class PickerTimeUTCDelegate extends Ui.PickerDelegate {
 
   //
   // FUNCTIONS: Ui.PickerDelegate (override/implement)
