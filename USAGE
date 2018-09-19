@@ -1,12 +1,12 @@
-Pilot SR/SS (Garmin ConnectIQ) Widget
-=====================================
+PilotSRSS (Garmin ConnectIQ) Widget
+===================================
 Usage instructions
 
 
 Global View
 -----------
 
-Pilot SR/SS displays sunrise/sunset and twilight hours in two views, which you can
+PilotSRSS displays sunrise/sunset and twilight hours in two views, which you can
 toggle thanks to the SELECT button:
  - Sunrise/Sunset and Civil Twilight view:
    time of sunrise and sunset, i.e. when the center of the solar disk

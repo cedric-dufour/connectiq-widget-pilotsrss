@@ -1,13 +1,13 @@
 // -*- mode:java; tab-width:2; c-basic-offset:2; intent-tabs-mode:nil; -*- ex: set tabstop=2 expandtab:
 
-// Pilot SR/SS/Twilight Hours (Pilot SR/SS)
+// Pilot SR/SS/Twilight Hours (PilotSRSS)
 // Copyright (C) 2018 Cedric Dufour <http://cedric.dufour.name>
 //
-// Pilot SR/SS/Twilight Hours (Pilot SR/SS) is free software:
+// Pilot SR/SS/Twilight Hours (PilotSRSS) is free software:
 // you can redistribute it and/or modify it under the terms of the GNU General
 // Public License as published by the Free Software Foundation, Version 3.
 //
-// Pilot SR/SS/Twilight Hours (Pilot SR/SS) is distributed in the hope that it
+// Pilot SR/SS/Twilight Hours (PilotSRSS) is distributed in the hope that it
 // will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
