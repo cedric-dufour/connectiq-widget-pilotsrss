@@ -336,7 +336,7 @@ class PH_View extends Ui.View {
 
   function stringHeight(_fHeight) {
     var fValue = _fHeight * $.PH_oSettings.fUnitElevationConstant;
-    return Lang.format("$1$ $2$", [fValue.format("%d"), $.PH_oSettings.sUnitElevation]);
+    return Lang.format("$1$ $2$", [fValue.format("%.0f"), $.PH_oSettings.sUnitElevation]);
   }
 
 }
