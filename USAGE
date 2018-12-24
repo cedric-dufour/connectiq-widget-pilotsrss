@@ -37,20 +37,25 @@ Settings
 Enter the Settings menu by pressing the MENU button (long-pressing the UP button).
 
 You may then specify the following settings:
- - Location -> Location Source:
-   specify whether to use your current GPS position as location or a preset location
- - Location -> Height:
-   specify the observer's height (in meters, Above Ground Level) at the location
- - Location -> Load/Edit/Save/Delete Location:
-   load/edit/save/delete preset locations (among a 100 available memory slots)
- - Date/Time -> Date Source:
-   specify whether to use your current date or a preset date
- - Date/Time -> Preset Date:
-   specify the preset date to use
- - Date/Time -> Timezone
-   specify whether to display the Local Time (LT) or Universal Time Coordinates (UTC/Z)
- - Background Color
-   specify the background color
+
+* Location
+  - Location Source:
+    specify whether to use your current GPS position as location or a preset location
+  - Load/Edit/Save/Delete Location:
+    load/edit/save/delete preset locations (among a 100 available memory slots)
+  - Height:
+    specify the observer's height (in meters, Above Ground Level) at the location
+
+* Date/Time
+  - Date Source:
+    specify whether to use your current date or a preset date
+  - Preset Date:
+    specify the preset date to use
+  - Timezone
+    specify whether to display the Local Time (LT) or Universal Time Coordinates (UTC/Z)
+
+- Background Color:
+  specify the background color
 
 
 WARNING!!! GOTCHAS!!!

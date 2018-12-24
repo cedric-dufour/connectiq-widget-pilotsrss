@@ -3,7 +3,7 @@ PilotSRSS (Garmin ConnectIQ) Widget
 Pilot SR/SS/Twilight hours for Garmin ConnectIQ devices
 
 
-   ![PilotSRSS-Overview](PilotSRSS-Overview.jpg)
+   ![PilotSRSS-Overview](overview.jpg)
 
 
 PilotSRSS is a Garmin ConnectIQ Widget that displays:
