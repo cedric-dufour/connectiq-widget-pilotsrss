@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.Time;
@@ -28,7 +29,7 @@ using Toybox.WatchUi as Ui;
 //
 
 // Current view index
-var iMyViewIndex = 0;
+var iMyViewIndex as Number = 0;
 
 
 //
@@ -50,29 +51,29 @@ class MyView extends Ui.View {
   //
 
   // Display mode (internal)
-  private var bShow;
+  private var bShow as Boolean = false;
 
   // Resources
   // ... drawable
-  private var oRezDrawable;
+  private var oRezDrawable as MyDrawable?;
   // ... header
-  private var oRezValueDate;
+  private var oRezValueDate as Ui.Text?;
   // ... label
-  private var oRezLabelTop;
+  private var oRezLabelTop as Ui.Text?;
   // ... fields (2x2)
-  private var oRezValueTopLeft;
-  private var oRezValueTopRight;
-  private var oRezValueBottomLeft;
-  private var oRezValueBottomRight;
+  private var oRezValueTopLeft as Ui.Text?;
+  private var oRezValueTopRight as Ui.Text?;
+  private var oRezValueBottomLeft as Ui.Text?;
+  private var oRezValueBottomRight as Ui.Text?;
   // ... fields (4x1)
-  private var oRezValueTopHigh;
-  private var oRezValueTopLow;
-  private var oRezValueBottomHigh;
-  private var oRezValueBottomLow;
+  private var oRezValueTopHigh as Ui.Text?;
+  private var oRezValueTopLow as Ui.Text?;
+  private var oRezValueBottomHigh as Ui.Text?;
+  private var oRezValueBottomLow as Ui.Text?;
   // ... label
-  private var oRezLabelBottom;
+  private var oRezLabelBottom as Ui.Text?;
   // ... footer
-  private var oRezValueTime;
+  private var oRezValueTime as Ui.Text?;
 
 
   //
@@ -81,9 +82,6 @@ class MyView extends Ui.View {
 
   function initialize() {
     View.initialize();
-
-    // Display mode (internal)
-    self.bShow = false;
   }
 
   function onLayout(_oDC) {
@@ -91,28 +89,25 @@ class MyView extends Ui.View {
 
     // Load resources
     // ... drawable
-    self.oRezDrawable = View.findDrawableById("MyDrawable");
+    self.oRezDrawable = View.findDrawableById("MyDrawable") as MyDrawable?;
     // ... header
-    self.oRezValueDate = View.findDrawableById("valueDate");
+    self.oRezValueDate = View.findDrawableById("valueDate") as Ui.Text?;
     // ... label
-    self.oRezLabelTop = View.findDrawableById("labelTop");
+    self.oRezLabelTop = View.findDrawableById("labelTop") as Ui.Text?;
     // ... fields (2x2)
-    self.oRezValueTopLeft = View.findDrawableById("valueTopLeft");
-    self.oRezValueTopRight = View.findDrawableById("valueTopRight");
-    self.oRezValueBottomLeft = View.findDrawableById("valueBottomLeft");
-    self.oRezValueBottomRight = View.findDrawableById("valueBottomRight");
+    self.oRezValueTopLeft = View.findDrawableById("valueTopLeft") as Ui.Text?;
+    self.oRezValueTopRight = View.findDrawableById("valueTopRight") as Ui.Text?;
+    self.oRezValueBottomLeft = View.findDrawableById("valueBottomLeft") as Ui.Text?;
+    self.oRezValueBottomRight = View.findDrawableById("valueBottomRight") as Ui.Text?;
     // ... fields (4x1)
-    self.oRezValueTopHigh = View.findDrawableById("valueTopHigh");
-    self.oRezValueTopLow = View.findDrawableById("valueTopLow");
-    self.oRezValueBottomHigh = View.findDrawableById("valueBottomHigh");
-    self.oRezValueBottomLow = View.findDrawableById("valueBottomLow");
+    self.oRezValueTopHigh = View.findDrawableById("valueTopHigh") as Ui.Text?;
+    self.oRezValueTopLow = View.findDrawableById("valueTopLow") as Ui.Text?;
+    self.oRezValueBottomHigh = View.findDrawableById("valueBottomHigh") as Ui.Text?;
+    self.oRezValueBottomLow = View.findDrawableById("valueBottomLow") as Ui.Text?;
     // ... label
-    self.oRezLabelBottom = View.findDrawableById("labelBottom");
+    self.oRezLabelBottom = View.findDrawableById("labelBottom") as Ui.Text?;
     // ... footer
-    self.oRezValueTime = View.findDrawableById("valueTime");
-
-    // Done
-    return true;
+    self.oRezValueTime = View.findDrawableById("valueTime") as Ui.Text?;
   }
 
   function onShow() {
@@ -124,26 +119,45 @@ class MyView extends Ui.View {
     // Set colors
     var iColorText = $.oMySettings.iBackgroundColor ? Gfx.COLOR_BLACK : Gfx.COLOR_WHITE;
     // ... background
-    self.oRezDrawable.setColorBackground($.oMySettings.iBackgroundColor);
+    if(self.oRezDrawable != null) {
+      (self.oRezDrawable as MyDrawable).setColorBackground($.oMySettings.iBackgroundColor);
+    }
     // ... date
     // -> depends on settings
     // ... fields (2x2)
-    self.oRezValueTopLeft.setColor(iColorText);
-    self.oRezValueTopRight.setColor(iColorText);
-    self.oRezValueBottomLeft.setColor(iColorText);
-    self.oRezValueBottomRight.setColor(iColorText);
+    if(self.oRezValueTopLeft != null) {
+      (self.oRezValueTopLeft as Ui.Text).setColor(iColorText);
+    }
+    if(self.oRezValueTopRight != null) {
+      (self.oRezValueTopRight as Ui.Text).setColor(iColorText);
+    }
+    if(self.oRezValueBottomLeft != null) {
+      (self.oRezValueBottomLeft as Ui.Text).setColor(iColorText);
+    }
+    if(self.oRezValueBottomRight != null) {
+      (self.oRezValueBottomRight as Ui.Text).setColor(iColorText);
+    }
     // ... fields (4x1)
-    self.oRezValueTopHigh.setColor(iColorText);
-    self.oRezValueTopLow.setColor(iColorText);
-    self.oRezValueBottomHigh.setColor(iColorText);
-    self.oRezValueBottomLow.setColor(iColorText);
+    if(self.oRezValueTopHigh != null) {
+      (self.oRezValueTopHigh as Ui.Text).setColor(iColorText);
+    }
+    if(self.oRezValueTopLow != null) {
+      (self.oRezValueTopLow as Ui.Text).setColor(iColorText);
+    }
+    if(self.oRezValueBottomHigh != null) {
+      (self.oRezValueBottomHigh as Ui.Text).setColor(iColorText);
+    }
+    if(self.oRezValueBottomLow != null) {
+      (self.oRezValueBottomLow as Ui.Text).setColor(iColorText);
+    }
     // ... time
-    self.oRezValueTime.setColor(iColorText);
+    if(self.oRezValueTime != null) {
+      (self.oRezValueTime as Ui.Text).setColor(iColorText);
+    }
 
     // Done
     self.bShow = true;
     $.oMyView = self;
-    return true;
   }
 
   function onUpdate(_oDC) {
@@ -152,9 +166,6 @@ class MyView extends Ui.View {
     // Update layout
     self.updateLayout();
     View.onUpdate(_oDC);
-
-    // Done
-    return true;
   }
 
   function onHide() {
@@ -168,14 +179,14 @@ class MyView extends Ui.View {
   // FUNCTIONS: self
   //
 
-  function reloadSettings() {
+  function reloadSettings() as Void {
     //Sys.println("DEBUG: MyView.reloadSettings()");
 
     // Update application state
-    App.getApp().updateApp();
+    (App.getApp() as MyApp).updateApp();
   }
 
-  function updateUi() {
+  function updateUi() as Void {
     //Sys.println("DEBUG: MyView.updateUi()");
 
     // Request UI update
@@ -184,95 +195,113 @@ class MyView extends Ui.View {
     }
   }
 
-  function updateLayout() {
+  function updateLayout() as Void {
     //Sys.println("DEBUG: MyView.updateLayout()");
+    if(self.oRezDrawable == null) {
+      return;
+    }
 
     // Set header/footer values
     var iColorText = $.oMySettings.iBackgroundColor ? Gfx.COLOR_BLACK : Gfx.COLOR_WHITE;
 
     // ... date
-    self.oRezValueDate.setColor($.oMySettings.bDateAuto ? iColorText : Gfx.COLOR_LT_GRAY);
-    if($.oMyAlmanac.iEpochCurrent != null) {
-      var oDate = new Time.Moment($.oMyAlmanac.iEpochCurrent);
-      var oDateInfo = $.oMySettings.bTimeUTC ? Gregorian.utcInfo(oDate, Time.FORMAT_MEDIUM) : Gregorian.info(oDate, Time.FORMAT_MEDIUM);
-      self.oRezValueDate.setText(Lang.format("$1$ $2$", [oDateInfo.month, oDateInfo.day.format("%d")]));
-    }
-    else if($.oMyAlmanac.iEpochDate != null) {
-      var oDateInfo = Gregorian.utcInfo(new Time.Moment($.oMyAlmanac.iEpochDate), Time.FORMAT_MEDIUM);
-      self.oRezValueDate.setText(Lang.format("$1$ $2$", [oDateInfo.month, oDateInfo.day.format("%d")]));
-    }
-    else {
-      self.oRezValueDate.setText(self.NOVALUE_LEN3);
+    if(self.oRezValueDate != null) {
+      (self.oRezValueDate as Ui.Text).setColor($.oMySettings.bDateAuto ? iColorText : Gfx.COLOR_LT_GRAY);
+      if($.oMyAlmanac.iEpochCurrent != null) {
+        var oDate = new Time.Moment($.oMyAlmanac.iEpochCurrent as Number);
+        var oDateInfo = $.oMySettings.bTimeUTC ? Gregorian.utcInfo(oDate, Time.FORMAT_MEDIUM) : Gregorian.info(oDate, Time.FORMAT_MEDIUM);
+        (self.oRezValueDate as Ui.Text).setText(format("$1$ $2$", [oDateInfo.month, oDateInfo.day.format("%d")]));
+      }
+      else if($.oMyAlmanac.iEpochDate != null) {
+        var oDateInfo = Gregorian.utcInfo(new Time.Moment($.oMyAlmanac.iEpochDate as Number), Time.FORMAT_MEDIUM);
+        (self.oRezValueDate as Ui.Text).setText(format("$1$ $2$", [oDateInfo.month, oDateInfo.day.format("%d")]));
+      }
+      else {
+        (self.oRezValueDate as Ui.Text).setText(self.NOVALUE_LEN3);
+      }
     }
 
     // ... time
-    var oTimeNow = Time.now();
-    var oTimeInfo = $.oMySettings.bTimeUTC ? Gregorian.utcInfo(oTimeNow, Time.FORMAT_SHORT) : Gregorian.info(oTimeNow, Time.FORMAT_SHORT);
-    self.oRezValueTime.setText(Lang.format("$1$:$2$ $3$", [oTimeInfo.hour.format("%02d"), oTimeInfo.min.format("%02d"), $.oMySettings.sUnitTime]));
+    if(self.oRezValueTime != null) {
+      var oTimeNow = Time.now();
+      var oTimeInfo = $.oMySettings.bTimeUTC ? Gregorian.utcInfo(oTimeNow, Time.FORMAT_SHORT) : Gregorian.info(oTimeNow, Time.FORMAT_SHORT);
+      (self.oRezValueTime as Ui.Text).setText(format("$1$:$2$ $3$", [oTimeInfo.hour.format("%02d"), oTimeInfo.min.format("%02d"), $.oMySettings.sUnitTime]));
+    }
 
     // Set field values
+    if(self.oRezLabelTop == null
+       or self.oRezValueTopLeft == null or self.oRezValueTopRight == null
+       or self.oRezValueTopHigh == null or self.oRezValueTopLow == null
+       or self.oRezLabelBottom == null
+       or self.oRezValueBottomLeft == null or self.oRezValueBottomRight == null
+       or self.oRezValueBottomHigh == null or self.oRezValueBottomLow == null
+       ) {
+      return;
+    }
     if($.iMyViewIndex == 0) {
-      self.oRezDrawable.setDividers(MyDrawable.DRAW_DIVIDER_HORIZONTAL | MyDrawable.DRAW_DIVIDER_VERTICAL_TOP | MyDrawable.DRAW_DIVIDER_VERTICAL_BOTTOM);
+      (self.oRezDrawable as MyDrawable).setDividers(MyDrawable.DRAW_DIVIDER_HORIZONTAL
+                                                    | MyDrawable.DRAW_DIVIDER_VERTICAL_TOP
+                                                    | MyDrawable.DRAW_DIVIDER_VERTICAL_BOTTOM);
       // ... sunrise/sunset
-      self.oRezLabelTop.setText(Ui.loadResource(Rez.Strings.labelSunriseSunset));
+      (self.oRezLabelTop as Ui.Text).setText(Ui.loadResource(Rez.Strings.labelSunriseSunset) as String);
       if($.oMyAlmanac.iEpochSunrise != null and $.oMyAlmanac.iEpochSunset != null) {
-        self.oRezValueTopLeft.setText(self.stringTime($.oMyAlmanac.iEpochSunrise, true));
-        self.oRezValueTopRight.setText(self.stringTime($.oMyAlmanac.iEpochSunset, true));
+        (self.oRezValueTopLeft as Ui.Text).setText(self.stringTime($.oMyAlmanac.iEpochSunrise as Number, true));
+        (self.oRezValueTopRight as Ui.Text).setText(self.stringTime($.oMyAlmanac.iEpochSunset as Number, true));
       }
       else {
-        self.oRezValueTopLeft.setText(self.NOVALUE_LEN3);
-        self.oRezValueTopRight.setText(self.NOVALUE_LEN3);
+        (self.oRezValueTopLeft as Ui.Text).setText(self.NOVALUE_LEN3);
+        (self.oRezValueTopRight as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... civil dawn/dusk
-      self.oRezLabelBottom.setText(Ui.loadResource(Rez.Strings.labelCivilDawnDusk));
+      (self.oRezLabelBottom as Ui.Text).setText(Ui.loadResource(Rez.Strings.labelCivilDawnDusk) as String);
       if($.oMyAlmanac.iEpochCivilDawn != null and $.oMyAlmanac.iEpochCivilDusk != null) {
-        self.oRezValueBottomLeft.setText(self.stringTime($.oMyAlmanac.iEpochCivilDawn, true));
-        self.oRezValueBottomRight.setText(self.stringTime($.oMyAlmanac.iEpochCivilDusk, true));
+        (self.oRezValueBottomLeft as Ui.Text).setText(self.stringTime($.oMyAlmanac.iEpochCivilDawn as Number, true));
+        (self.oRezValueBottomRight as Ui.Text).setText(self.stringTime($.oMyAlmanac.iEpochCivilDusk as Number, true));
       }
       else {
-        self.oRezValueBottomLeft.setText(self.NOVALUE_LEN3);
-        self.oRezValueBottomRight.setText(self.NOVALUE_LEN3);
+        (self.oRezValueBottomLeft as Ui.Text).setText(self.NOVALUE_LEN3);
+        (self.oRezValueBottomRight as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... clear previous view fields
-      self.oRezValueTopHigh.setText(self.NOVALUE_BLANK);
-      self.oRezValueTopLow.setText(self.NOVALUE_BLANK);
-      self.oRezValueBottomHigh.setText(self.NOVALUE_BLANK);
-      self.oRezValueBottomLow.setText(self.NOVALUE_BLANK);
+      (self.oRezValueTopHigh as Ui.Text).setText(self.NOVALUE_BLANK);
+      (self.oRezValueTopLow as Ui.Text).setText(self.NOVALUE_BLANK);
+      (self.oRezValueBottomHigh as Ui.Text).setText(self.NOVALUE_BLANK);
+      (self.oRezValueBottomLow as Ui.Text).setText(self.NOVALUE_BLANK);
     }
     else if($.iMyViewIndex == 1) {
-      self.oRezDrawable.setDividers(0);
+      (self.oRezDrawable as MyDrawable).setDividers(0);
       // ... location
-      self.oRezLabelTop.setText(Ui.loadResource(Rez.Strings.labelLocation));
+      (self.oRezLabelTop as Ui.Text).setText(Ui.loadResource(Rez.Strings.labelLocation) as String);
       if($.oMyAlmanac.sLocationName != null) {
-        self.oRezValueTopHigh.setText($.oMyAlmanac.sLocationName);
+        (self.oRezValueTopHigh as Ui.Text).setText($.oMyAlmanac.sLocationName as String);
       }
       else {
-        self.oRezValueTopHigh.setText(self.NOVALUE_LEN3);
+        (self.oRezValueTopHigh as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       if($.oMyAlmanac.dLocationLatitude != null and $.oMyAlmanac.dLocationLongitude != null) {
-        self.oRezValueTopLow.setText(self.stringLatitude($.oMyAlmanac.dLocationLatitude));
-        self.oRezValueBottomHigh.setText(self.stringLongitude($.oMyAlmanac.dLocationLongitude));
+        (self.oRezValueTopLow as Ui.Text).setText(self.stringLatitude($.oMyAlmanac.dLocationLatitude as Double));
+        (self.oRezValueBottomHigh as Ui.Text).setText(self.stringLongitude($.oMyAlmanac.dLocationLongitude as Double));
       }
       else {
-        self.oRezValueTopLow.setText(self.NOVALUE_BLANK);
-        self.oRezValueBottomHigh.setText(self.NOVALUE_BLANK);
+        (self.oRezValueTopLow as Ui.Text).setText(self.NOVALUE_BLANK);
+        (self.oRezValueBottomHigh as Ui.Text).setText(self.NOVALUE_BLANK);
       }
       if($.oMyAlmanac.fLocationHeight != null) {
-        self.oRezValueBottomLow.setText(self.stringHeight($.oMyAlmanac.fLocationHeight));
+        (self.oRezValueBottomLow as Ui.Text).setText(self.stringHeight($.oMyAlmanac.fLocationHeight as Float));
       }
       else {
-        self.oRezValueBottomLow.setText(self.NOVALUE_LEN3);
+        (self.oRezValueBottomLow as Ui.Text).setText(self.NOVALUE_LEN3);
       }
-      self.oRezLabelBottom.setText(Ui.loadResource(Rez.Strings.labelHeight));
+      (self.oRezLabelBottom as Ui.Text).setText(Ui.loadResource(Rez.Strings.labelHeight) as String);
       // ... clear previous view fields
-      self.oRezValueTopLeft.setText(self.NOVALUE_BLANK);
-      self.oRezValueTopRight.setText(self.NOVALUE_BLANK);
-      self.oRezValueBottomLeft.setText(self.NOVALUE_BLANK);
-      self.oRezValueBottomRight.setText(self.NOVALUE_BLANK);
+      (self.oRezValueTopLeft as Ui.Text).setText(self.NOVALUE_BLANK);
+      (self.oRezValueTopRight as Ui.Text).setText(self.NOVALUE_BLANK);
+      (self.oRezValueBottomLeft as Ui.Text).setText(self.NOVALUE_BLANK);
+      (self.oRezValueBottomRight as Ui.Text).setText(self.NOVALUE_BLANK);
     }
   }
 
-  function stringTime(_iEpochTimestamp, _bRoundUp) {
+  function stringTime(_iEpochTimestamp as Number, _bRoundUp as Boolean) as String {
     // Components
     var oTime = new Time.Moment(_iEpochTimestamp);
     var oTimeInfo;
@@ -297,10 +326,10 @@ class MyView extends Ui.View {
     }
 
     // String
-    return Lang.format("$1$:$2$", [iTime_hour.format("%d"), iTime_min.format("%02d")]);
+    return format("$1$:$2$", [iTime_hour.format("%d"), iTime_min.format("%02d")]);
   }
 
-  function stringLatitude(_dLatitude) {
+  function stringLatitude(_dLatitude as Double) as String {
     // Split components
     var iLatitude_qua = _dLatitude < 0.0d ? -1 : 1;
     _dLatitude = _dLatitude.abs();
@@ -314,10 +343,10 @@ class MyView extends Ui.View {
     }
 
     // String
-    return Lang.format("$1$°$2$'$3$\" $4$", [iLatitude_deg.format("%d"), iLatitude_min.format("%02d"), iLatitude_sec.format("%02d"), iLatitude_qua < 0 ? "S" : "N"]);
+    return format("$1$°$2$'$3$\" $4$", [iLatitude_deg.format("%d"), iLatitude_min.format("%02d"), iLatitude_sec.format("%02d"), iLatitude_qua < 0 ? "S" : "N"]);
   }
 
-  function stringLongitude(_dLongitude) {
+  function stringLongitude(_dLongitude as Double) as String {
     // Split components
     var iLongitude_qua = _dLongitude < 0.0d ? -1 : 1;
     _dLongitude = _dLongitude.abs();
@@ -331,12 +360,12 @@ class MyView extends Ui.View {
     }
 
     // String
-    return Lang.format("$1$°$2$'$3$\" $4$", [iLongitude_deg.format("%d"), iLongitude_min.format("%02d"), iLongitude_sec.format("%02d"), iLongitude_qua < 0 ? "W" : "E"]);
+    return format("$1$°$2$'$3$\" $4$", [iLongitude_deg.format("%d"), iLongitude_min.format("%02d"), iLongitude_sec.format("%02d"), iLongitude_qua < 0 ? "W" : "E"]);
   }
 
-  function stringHeight(_fHeight) {
+  function stringHeight(_fHeight as Float) as String {
     var fValue = _fHeight * $.oMySettings.fUnitElevationConstant;
-    return Lang.format("$1$ $2$", [fValue.format("%.0f"), $.oMySettings.sUnitElevation]);
+    return format("$1$ $2$", [fValue.format("%.0f"), $.oMySettings.sUnitElevation]);
   }
 
 }
@@ -349,7 +378,9 @@ class MyViewDelegate extends Ui.BehaviorDelegate {
 
   function onMenu() {
     //Sys.println("DEBUG: MyViewDelegate.onMenu()");
-    Ui.pushView(new MenuSettings(), new MenuSettingsDelegate(), Ui.SLIDE_IMMEDIATE);
+    Ui.pushView(new MenuSettings(),
+                new MenuSettingsDelegate(),
+                Ui.SLIDE_IMMEDIATE);
     return true;
   }
 

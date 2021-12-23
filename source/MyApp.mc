@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Position as Pos;
 using Toybox.System as Sys;
@@ -28,16 +29,16 @@ using Toybox.WatchUi as Ui;
 //
 
 // Application settings
-var oMySettings = null;
+var oMySettings as MySettings = new MySettings();
 
 // (Last) position location
-var oMyPositionLocation = null;
+var oMyPositionLocation as Pos.Location?;
 
 // Almanac data
-var oMyAlmanac = null;
+var oMyAlmanac as MyAlmanac = new MyAlmanac();
 
 // Current view
-var oMyView = null;
+var oMyView as MyView?;
 
 
 //
@@ -59,7 +60,7 @@ class MyApp extends App.AppBase {
   //
 
   // UI update time
-  private var oUpdateTimer;
+  private var oUpdateTimer as Timer.Timer?;
 
 
   //
@@ -68,15 +69,6 @@ class MyApp extends App.AppBase {
 
   function initialize() {
     AppBase.initialize();
-
-    // Application settings
-    $.oMySettings = new MySettings();
-
-    // Almanac data
-    $.oMyAlmanac = new MyAlmanac();
-
-    // UI update time
-    self.oUpdateTimer = null;
   }
 
   function onStart(state) {
@@ -86,10 +78,10 @@ class MyApp extends App.AppBase {
     self.oUpdateTimer = new Timer.Timer();
     var iUpdateTimerDelay = (60-Sys.getClockTime().sec)%60;
     if(iUpdateTimerDelay > 0) {
-      self.oUpdateTimer.start(method(:onUpdateTimer_init), 1000*iUpdateTimerDelay, false);
+      (self.oUpdateTimer as Timer.Timer).start(method(:onUpdateTimer_init), 1000*iUpdateTimerDelay, false);
     }
     else {
-      self.oUpdateTimer.start(method(:onUpdateTimer), 60000, true);
+      (self.oUpdateTimer as Timer.Timer).start(method(:onUpdateTimer), 60000, true);
     }
   }
 
@@ -98,7 +90,7 @@ class MyApp extends App.AppBase {
 
     // Stop UI update timer
     if(self.oUpdateTimer != null) {
-      self.oUpdateTimer.stop();
+      (self.oUpdateTimer as Timer.Timer).stop();
       self.oUpdateTimer = null;
     }
   }
@@ -106,7 +98,7 @@ class MyApp extends App.AppBase {
   function getInitialView() {
     //Sys.println("DEBUG: MyApp.getInitialView()");
 
-    return [new MyView(), new MyViewDelegate()];
+    return [new MyView(), new MyViewDelegate()] as Array<Ui.Views or Ui.InputDelegates>;
   }
 
   function onSettingsChanged() {
@@ -119,7 +111,7 @@ class MyApp extends App.AppBase {
   // FUNCTIONS: self
   //
 
-  function updateApp() {
+  function updateApp() as Void {
     //Sys.println("DEBUG: MyApp.updateApp()");
 
     // Load settings
@@ -130,88 +122,103 @@ class MyApp extends App.AppBase {
       Pos.enableLocationEvents(Pos.LOCATION_ONE_SHOT, method(:onLocationEvent));
     }
     else {
-      var dictLocation = App.Storage.getValue("storLocPreset");
-      var fLocationHeight = App.Properties.getValue("userLocationHeight");
-      var iEpochDate = $.oMySettings.bDateAuto ? Time.today().value() : App.Storage.getValue("storDatePreset");
+      var dictLocation = App.Storage.getValue("storLocPreset") as Dictionary?;
+      var fLocationHeight = App.Properties.getValue("userLocationHeight") as Float?;
+      var iEpochToday = Time.today().value();
+      var iEpochDate = $.oMySettings.bDateAuto ? iEpochToday : App.Storage.getValue("storDatePreset") as Number?;
       var iEpochTime = $.oMySettings.bDateAuto ? Time.now().value() : null;
-      self.computeAlmanac(dictLocation["name"], dictLocation["latitude"], dictLocation["longitude"], fLocationHeight, iEpochDate, iEpochTime);
+      if(dictLocation != null) {
+        self.computeAlmanac(dictLocation["name"] as String,
+                            dictLocation["latitude"] as Double,
+                            dictLocation["longitude"] as Double,
+                            fLocationHeight != null ? fLocationHeight : 0.0f,
+                            iEpochDate != null ? iEpochDate : iEpochToday,
+                            iEpochTime);
+      }
     }
 
     // Update UI
     self.updateUi();
   }
 
-  function loadSettings() {
+  function loadSettings() as Void {
     //Sys.println("DEBUG: MyApp.loadSettings()");
 
     // Load settings
     $.oMySettings.load();
 
     // ... location
-    var dictLocation = App.Storage.getValue("storLocPreset");
+    var dictLocation = App.Storage.getValue("storLocPreset") as Dictionary?;
     if(dictLocation == null) {
       // Sun Almanac was born in Switzerland; use "Old" Bern Observatory coordinates ;-)
-      dictLocation = { "name" => "LSAS", "latitude" => 46.9524055555556d, "longitude" => 7.43958333333333d };
-      App.Storage.setValue("storLocPreset", dictLocation);
+      dictLocation = {"name" => "LSAS", "latitude" => 46.9524055555556d, "longitude" => 7.43958333333333d};
+      App.Storage.setValue("storLocPreset", dictLocation as App.PropertyValueType);
     }
 
     // ... date
     var iEpochDate = App.Storage.getValue("storDatePreset");
     if(iEpochDate == null) {
       iEpochDate = Time.today().value();
-      App.Storage.setValue("storDatePreset", iEpochDate);
+      App.Storage.setValue("storDatePreset", iEpochDate as App.PropertyValueType);
     }
   }
 
-  function computeAlmanac(_sLocationName, _fLocationLatitude, _fLocationLongitude, _fLocationHeight, _iEpochDate, _iEpochTime) {
+  function computeAlmanac(_sLocationName as String,
+                          _dLocationLatitude as Double, _dLocationLongitude as Double, _fLocationHeight as Float,
+                          _iEpochDate as Number, _iEpochTime as Number?) as Void {
     //Sys.println("DEBUG: MyApp.computeAlmanac()");
 
     // Compute almanac data
-    $.oMyAlmanac.setLocation(_sLocationName, _fLocationLatitude, _fLocationLongitude, _fLocationHeight);
+    $.oMyAlmanac.setLocation(_sLocationName, _dLocationLatitude, _dLocationLongitude, _fLocationHeight);
     $.oMyAlmanac.compute(_iEpochDate, _iEpochTime, true);
   }
 
-  function onLocationEvent(_oInfo) {
+  function onLocationEvent(_oInfo as Pos.Info) as Void {
     //Sys.println("DEBUG: MyApp.onLocationEvent()");
     if(!$.oMySettings.bLocationAuto) {
       return;  // should one have changed his mind while waiting for GPS fix
     }
-    if(!(_oInfo has :position)) {
+    if(!(_oInfo has :position) or _oInfo.position == null) {
       return;
     }
 
     // Save position
-    $.oMyPositionLocation = _oInfo.position;
+    $.oMyPositionLocation = _oInfo.position as Pos.Location;
 
     // Update almanac data
-    var adLocation = _oInfo.position.toDegrees();
-    var fLocationHeight = App.Properties.getValue("userLocationHeight");
-    var iEpochDate = $.oMySettings.bDateAuto ? Time.today().value() : App.Storage.getValue("storDatePreset");
+    var adLocation = (_oInfo.position as Pos.Location).toDegrees();
+    var fLocationHeight = App.Properties.getValue("userLocationHeight") as Float?;
+    var iEpochToday = Time.today().value();
+    var iEpochDate = $.oMySettings.bDateAuto ? iEpochToday : App.Storage.getValue("storDatePreset") as Number?;
     var iEpochTime = $.oMySettings.bDateAuto ? Time.now().value() : null;
-    self.computeAlmanac(Ui.loadResource(Rez.Strings.valueLocationGPS), adLocation[0], adLocation[1], fLocationHeight, iEpochDate, iEpochTime);
+    self.computeAlmanac(Ui.loadResource(Rez.Strings.valueLocationGPS) as String,
+                        adLocation[0], adLocation[1],
+                        fLocationHeight != null ? fLocationHeight : 0.0f,
+                        iEpochDate != null ? iEpochDate : iEpochToday,
+                        iEpochTime);
 
     // Update UI
     self.updateUi();
   }
 
-  function onUpdateTimer_init() {
+  function onUpdateTimer_init() as Void {
     //Sys.println("DEBUG: MyApp.onUpdateTimer_init()");
     self.onUpdateTimer();
     self.oUpdateTimer = new Timer.Timer();
-    self.oUpdateTimer.start(method(:onUpdateTimer), 60000, true);
+    (self.oUpdateTimer as Timer.Timer).start(method(:onUpdateTimer), 60000, true);
   }
 
-  function onUpdateTimer() {
+  function onUpdateTimer() as Void {
     //Sys.println("DEBUG: MyApp.onUpdateTimer()");
     self.updateUi();
   }
 
-  function updateUi() {
+  function updateUi() as Void {
     //Sys.println("DEBUG: MyApp.updateUi()");
 
     // Update UI
     if($.oMyView != null) {
-      $.oMyView.updateUi();
+      ($.oMyView as MyView).updateUi();
     }
   }
 
