@@ -28,14 +28,14 @@ using Toybox.WatchUi as Ui;
 //
 
 // Current view index
-var PH_iViewIndex = 0;
+var iMyViewIndex = 0;
 
 
 //
 // CLASS
 //
 
-class PH_View extends Ui.View {
+class MyView extends Ui.View {
 
   //
   // CONSTANTS
@@ -87,11 +87,11 @@ class PH_View extends Ui.View {
   }
 
   function onLayout(_oDC) {
-    View.setLayout(Rez.Layouts.PH_Layout(_oDC));
+    View.setLayout(Rez.Layouts.MyLayout(_oDC));
 
     // Load resources
     // ... drawable
-    self.oRezDrawable = View.findDrawableById("PH_Drawable");
+    self.oRezDrawable = View.findDrawableById("MyDrawable");
     // ... header
     self.oRezValueDate = View.findDrawableById("valueDate");
     // ... label
@@ -116,15 +116,15 @@ class PH_View extends Ui.View {
   }
 
   function onShow() {
-    //Sys.println("DEBUG: PH_View.onShow()");
+    //Sys.println("DEBUG: MyView.onShow()");
 
     // Reload settings (which may have been changed by user)
     self.reloadSettings();
 
     // Set colors
-    var iColorText = $.PH_oSettings.iBackgroundColor ? Gfx.COLOR_BLACK : Gfx.COLOR_WHITE;
+    var iColorText = $.oMySettings.iBackgroundColor ? Gfx.COLOR_BLACK : Gfx.COLOR_WHITE;
     // ... background
-    self.oRezDrawable.setColorBackground($.PH_oSettings.iBackgroundColor);
+    self.oRezDrawable.setColorBackground($.oMySettings.iBackgroundColor);
     // ... date
     // -> depends on settings
     // ... fields (2x2)
@@ -142,12 +142,12 @@ class PH_View extends Ui.View {
 
     // Done
     self.bShow = true;
-    $.PH_oCurrentView = self;
+    $.oMyView = self;
     return true;
   }
 
   function onUpdate(_oDC) {
-    //Sys.println("DEBUG: PH_View.onUpdate()");
+    //Sys.println("DEBUG: MyView.onUpdate()");
 
     // Update layout
     self.updateLayout();
@@ -158,8 +158,8 @@ class PH_View extends Ui.View {
   }
 
   function onHide() {
-    //Sys.println("DEBUG: PH_View.onHide()");
-    $.PH_oCurrentView = null;
+    //Sys.println("DEBUG: MyView.onHide()");
+    $.oMyView = null;
     self.bShow = false;
   }
 
@@ -169,14 +169,14 @@ class PH_View extends Ui.View {
   //
 
   function reloadSettings() {
-    //Sys.println("DEBUG: PH_View.reloadSettings()");
+    //Sys.println("DEBUG: MyView.reloadSettings()");
 
     // Update application state
     App.getApp().updateApp();
   }
 
   function updateUi() {
-    //Sys.println("DEBUG: PH_View.updateUi()");
+    //Sys.println("DEBUG: MyView.updateUi()");
 
     // Request UI update
     if(self.bShow) {
@@ -185,20 +185,20 @@ class PH_View extends Ui.View {
   }
 
   function updateLayout() {
-    //Sys.println("DEBUG: PH_View.updateLayout()");
+    //Sys.println("DEBUG: MyView.updateLayout()");
 
     // Set header/footer values
-    var iColorText = $.PH_oSettings.iBackgroundColor ? Gfx.COLOR_BLACK : Gfx.COLOR_WHITE;
+    var iColorText = $.oMySettings.iBackgroundColor ? Gfx.COLOR_BLACK : Gfx.COLOR_WHITE;
 
     // ... date
-    self.oRezValueDate.setColor($.PH_oSettings.bDateAuto ? iColorText : Gfx.COLOR_LT_GRAY);
-    if($.PH_oAlmanac.iEpochCurrent != null) {
-      var oDate = new Time.Moment($.PH_oAlmanac.iEpochCurrent);
-      var oDateInfo = $.PH_oSettings.bTimeUTC ? Gregorian.utcInfo(oDate, Time.FORMAT_MEDIUM) : Gregorian.info(oDate, Time.FORMAT_MEDIUM);
+    self.oRezValueDate.setColor($.oMySettings.bDateAuto ? iColorText : Gfx.COLOR_LT_GRAY);
+    if($.oMyAlmanac.iEpochCurrent != null) {
+      var oDate = new Time.Moment($.oMyAlmanac.iEpochCurrent);
+      var oDateInfo = $.oMySettings.bTimeUTC ? Gregorian.utcInfo(oDate, Time.FORMAT_MEDIUM) : Gregorian.info(oDate, Time.FORMAT_MEDIUM);
       self.oRezValueDate.setText(Lang.format("$1$ $2$", [oDateInfo.month, oDateInfo.day.format("%d")]));
     }
-    else if($.PH_oAlmanac.iEpochDate != null) {
-      var oDateInfo = Gregorian.utcInfo(new Time.Moment($.PH_oAlmanac.iEpochDate), Time.FORMAT_MEDIUM);
+    else if($.oMyAlmanac.iEpochDate != null) {
+      var oDateInfo = Gregorian.utcInfo(new Time.Moment($.oMyAlmanac.iEpochDate), Time.FORMAT_MEDIUM);
       self.oRezValueDate.setText(Lang.format("$1$ $2$", [oDateInfo.month, oDateInfo.day.format("%d")]));
     }
     else {
@@ -207,17 +207,17 @@ class PH_View extends Ui.View {
 
     // ... time
     var oTimeNow = Time.now();
-    var oTimeInfo = $.PH_oSettings.bTimeUTC ? Gregorian.utcInfo(oTimeNow, Time.FORMAT_SHORT) : Gregorian.info(oTimeNow, Time.FORMAT_SHORT);
-    self.oRezValueTime.setText(Lang.format("$1$:$2$ $3$", [oTimeInfo.hour.format("%02d"), oTimeInfo.min.format("%02d"), $.PH_oSettings.sUnitTime]));
+    var oTimeInfo = $.oMySettings.bTimeUTC ? Gregorian.utcInfo(oTimeNow, Time.FORMAT_SHORT) : Gregorian.info(oTimeNow, Time.FORMAT_SHORT);
+    self.oRezValueTime.setText(Lang.format("$1$:$2$ $3$", [oTimeInfo.hour.format("%02d"), oTimeInfo.min.format("%02d"), $.oMySettings.sUnitTime]));
 
     // Set field values
-    if($.PH_iViewIndex == 0) {
-      self.oRezDrawable.setDividers(PH_Drawable.DRAW_DIVIDER_HORIZONTAL | PH_Drawable.DRAW_DIVIDER_VERTICAL_TOP | PH_Drawable.DRAW_DIVIDER_VERTICAL_BOTTOM);
+    if($.iMyViewIndex == 0) {
+      self.oRezDrawable.setDividers(MyDrawable.DRAW_DIVIDER_HORIZONTAL | MyDrawable.DRAW_DIVIDER_VERTICAL_TOP | MyDrawable.DRAW_DIVIDER_VERTICAL_BOTTOM);
       // ... sunrise/sunset
       self.oRezLabelTop.setText(Ui.loadResource(Rez.Strings.labelSunriseSunset));
-      if($.PH_oAlmanac.iEpochSunrise != null and $.PH_oAlmanac.iEpochSunset != null) {
-        self.oRezValueTopLeft.setText(self.stringTime($.PH_oAlmanac.iEpochSunrise, true));
-        self.oRezValueTopRight.setText(self.stringTime($.PH_oAlmanac.iEpochSunset, true));
+      if($.oMyAlmanac.iEpochSunrise != null and $.oMyAlmanac.iEpochSunset != null) {
+        self.oRezValueTopLeft.setText(self.stringTime($.oMyAlmanac.iEpochSunrise, true));
+        self.oRezValueTopRight.setText(self.stringTime($.oMyAlmanac.iEpochSunset, true));
       }
       else {
         self.oRezValueTopLeft.setText(self.NOVALUE_LEN3);
@@ -225,9 +225,9 @@ class PH_View extends Ui.View {
       }
       // ... civil dawn/dusk
       self.oRezLabelBottom.setText(Ui.loadResource(Rez.Strings.labelCivilDawnDusk));
-      if($.PH_oAlmanac.iEpochCivilDawn != null and $.PH_oAlmanac.iEpochCivilDusk != null) {
-        self.oRezValueBottomLeft.setText(self.stringTime($.PH_oAlmanac.iEpochCivilDawn, true));
-        self.oRezValueBottomRight.setText(self.stringTime($.PH_oAlmanac.iEpochCivilDusk, true));
+      if($.oMyAlmanac.iEpochCivilDawn != null and $.oMyAlmanac.iEpochCivilDusk != null) {
+        self.oRezValueBottomLeft.setText(self.stringTime($.oMyAlmanac.iEpochCivilDawn, true));
+        self.oRezValueBottomRight.setText(self.stringTime($.oMyAlmanac.iEpochCivilDusk, true));
       }
       else {
         self.oRezValueBottomLeft.setText(self.NOVALUE_LEN3);
@@ -239,26 +239,26 @@ class PH_View extends Ui.View {
       self.oRezValueBottomHigh.setText(self.NOVALUE_BLANK);
       self.oRezValueBottomLow.setText(self.NOVALUE_BLANK);
     }
-    else if($.PH_iViewIndex == 1) {
+    else if($.iMyViewIndex == 1) {
       self.oRezDrawable.setDividers(0);
       // ... location
       self.oRezLabelTop.setText(Ui.loadResource(Rez.Strings.labelLocation));
-      if($.PH_oAlmanac.sLocationName != null) {
-        self.oRezValueTopHigh.setText($.PH_oAlmanac.sLocationName);
+      if($.oMyAlmanac.sLocationName != null) {
+        self.oRezValueTopHigh.setText($.oMyAlmanac.sLocationName);
       }
       else {
         self.oRezValueTopHigh.setText(self.NOVALUE_LEN3);
       }
-      if($.PH_oAlmanac.dLocationLatitude != null and $.PH_oAlmanac.dLocationLongitude != null) {
-        self.oRezValueTopLow.setText(self.stringLatitude($.PH_oAlmanac.dLocationLatitude));
-        self.oRezValueBottomHigh.setText(self.stringLongitude($.PH_oAlmanac.dLocationLongitude));
+      if($.oMyAlmanac.dLocationLatitude != null and $.oMyAlmanac.dLocationLongitude != null) {
+        self.oRezValueTopLow.setText(self.stringLatitude($.oMyAlmanac.dLocationLatitude));
+        self.oRezValueBottomHigh.setText(self.stringLongitude($.oMyAlmanac.dLocationLongitude));
       }
       else {
         self.oRezValueTopLow.setText(self.NOVALUE_BLANK);
         self.oRezValueBottomHigh.setText(self.NOVALUE_BLANK);
       }
-      if($.PH_oAlmanac.fLocationHeight != null) {
-        self.oRezValueBottomLow.setText(self.stringHeight($.PH_oAlmanac.fLocationHeight));
+      if($.oMyAlmanac.fLocationHeight != null) {
+        self.oRezValueBottomLow.setText(self.stringHeight($.oMyAlmanac.fLocationHeight));
       }
       else {
         self.oRezValueBottomLow.setText(self.NOVALUE_LEN3);
@@ -276,7 +276,7 @@ class PH_View extends Ui.View {
     // Components
     var oTime = new Time.Moment(_iEpochTimestamp);
     var oTimeInfo;
-    if($.PH_oSettings.bTimeUTC) {
+    if($.oMySettings.bTimeUTC) {
       oTimeInfo = Gregorian.utcInfo(oTime, Time.FORMAT_SHORT);
     }
     else {
@@ -335,27 +335,27 @@ class PH_View extends Ui.View {
   }
 
   function stringHeight(_fHeight) {
-    var fValue = _fHeight * $.PH_oSettings.fUnitElevationConstant;
-    return Lang.format("$1$ $2$", [fValue.format("%.0f"), $.PH_oSettings.sUnitElevation]);
+    var fValue = _fHeight * $.oMySettings.fUnitElevationConstant;
+    return Lang.format("$1$ $2$", [fValue.format("%.0f"), $.oMySettings.sUnitElevation]);
   }
 
 }
 
-class PH_ViewDelegate extends Ui.BehaviorDelegate {
+class MyViewDelegate extends Ui.BehaviorDelegate {
 
   function initialize() {
     BehaviorDelegate.initialize();
   }
 
   function onMenu() {
-    //Sys.println("DEBUG: PH_ViewDelegate.onMenu()");
+    //Sys.println("DEBUG: MyViewDelegate.onMenu()");
     Ui.pushView(new MenuSettings(), new MenuSettingsDelegate(), Ui.SLIDE_IMMEDIATE);
     return true;
   }
 
   function onSelect() {
-    //Sys.println("DEBUG: PH_ViewDelegate.onSelect()");
-    $.PH_iViewIndex = ( $.PH_iViewIndex + 1 ) % 2;
+    //Sys.println("DEBUG: MyViewDelegate.onSelect()");
+    $.iMyViewIndex = ( $.iMyViewIndex + 1 ) % 2;
     Ui.requestUpdate();
     return true;
   }

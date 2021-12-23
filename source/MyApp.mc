@@ -28,16 +28,16 @@ using Toybox.WatchUi as Ui;
 //
 
 // Application settings
-var PH_oSettings = null;
+var oMySettings = null;
 
 // (Last) position location
-var PH_oPositionLocation = null;
+var oMyPositionLocation = null;
 
 // Almanac data
-var PH_oAlmanac = null;
+var oMyAlmanac = null;
 
 // Current view
-var PH_oCurrentView = null;
+var oMyView = null;
 
 
 //
@@ -45,14 +45,14 @@ var PH_oCurrentView = null;
 //
 
 // Storage slots
-const SA_STORAGE_SLOTS = 100;
+const MY_STORAGE_SLOTS = 100;
 
 
 //
 // CLASS
 //
 
-class PH_App extends App.AppBase {
+class MyApp extends App.AppBase {
 
   //
   // VARIABLES
@@ -70,17 +70,17 @@ class PH_App extends App.AppBase {
     AppBase.initialize();
 
     // Application settings
-    $.PH_oSettings = new PH_Settings();
+    $.oMySettings = new MySettings();
 
     // Almanac data
-    $.PH_oAlmanac = new PH_Almanac();
+    $.oMyAlmanac = new MyAlmanac();
 
     // UI update time
     self.oUpdateTimer = null;
   }
 
   function onStart(state) {
-    //Sys.println("DEBUG: PH_App.onStart()");
+    //Sys.println("DEBUG: MyApp.onStart()");
 
     // Start UI update timer (every multiple of 60 seconds)
     self.oUpdateTimer = new Timer.Timer();
@@ -94,7 +94,7 @@ class PH_App extends App.AppBase {
   }
 
   function onStop(state) {
-    //Sys.println("DEBUG: PH_App.onStop()");
+    //Sys.println("DEBUG: MyApp.onStop()");
 
     // Stop UI update timer
     if(self.oUpdateTimer != null) {
@@ -104,13 +104,13 @@ class PH_App extends App.AppBase {
   }
 
   function getInitialView() {
-    //Sys.println("DEBUG: PH_App.getInitialView()");
+    //Sys.println("DEBUG: MyApp.getInitialView()");
 
-    return [new PH_View(), new PH_ViewDelegate()];
+    return [new MyView(), new MyViewDelegate()];
   }
 
   function onSettingsChanged() {
-    //Sys.println("DEBUG: PH_App.onSettingsChanged()");
+    //Sys.println("DEBUG: MyApp.onSettingsChanged()");
     self.updateApp();
   }
 
@@ -120,20 +120,20 @@ class PH_App extends App.AppBase {
   //
 
   function updateApp() {
-    //Sys.println("DEBUG: PH_App.updateApp()");
+    //Sys.println("DEBUG: MyApp.updateApp()");
 
     // Load settings
     self.loadSettings();
 
     // Use GPS position
-    if($.PH_oSettings.bLocationAuto) {
+    if($.oMySettings.bLocationAuto) {
       Pos.enableLocationEvents(Pos.LOCATION_ONE_SHOT, method(:onLocationEvent));
     }
     else {
       var dictLocation = App.Storage.getValue("storLocPreset");
       var fLocationHeight = App.Properties.getValue("userLocationHeight");
-      var iEpochDate = $.PH_oSettings.bDateAuto ? Time.today().value() : App.Storage.getValue("storDatePreset");
-      var iEpochTime = $.PH_oSettings.bDateAuto ? Time.now().value() : null;
+      var iEpochDate = $.oMySettings.bDateAuto ? Time.today().value() : App.Storage.getValue("storDatePreset");
+      var iEpochTime = $.oMySettings.bDateAuto ? Time.now().value() : null;
       self.computeAlmanac(dictLocation["name"], dictLocation["latitude"], dictLocation["longitude"], fLocationHeight, iEpochDate, iEpochTime);
     }
 
@@ -142,10 +142,10 @@ class PH_App extends App.AppBase {
   }
 
   function loadSettings() {
-    //Sys.println("DEBUG: PH_App.loadSettings()");
+    //Sys.println("DEBUG: MyApp.loadSettings()");
 
     // Load settings
-    $.PH_oSettings.load();
+    $.oMySettings.load();
 
     // ... location
     var dictLocation = App.Storage.getValue("storLocPreset");
@@ -164,16 +164,16 @@ class PH_App extends App.AppBase {
   }
 
   function computeAlmanac(_sLocationName, _fLocationLatitude, _fLocationLongitude, _fLocationHeight, _iEpochDate, _iEpochTime) {
-    //Sys.println("DEBUG: PH_App.computeAlmanac()");
+    //Sys.println("DEBUG: MyApp.computeAlmanac()");
 
     // Compute almanac data
-    $.PH_oAlmanac.setLocation(_sLocationName, _fLocationLatitude, _fLocationLongitude, _fLocationHeight);
-    $.PH_oAlmanac.compute(_iEpochDate, _iEpochTime, true);
+    $.oMyAlmanac.setLocation(_sLocationName, _fLocationLatitude, _fLocationLongitude, _fLocationHeight);
+    $.oMyAlmanac.compute(_iEpochDate, _iEpochTime, true);
   }
 
   function onLocationEvent(_oInfo) {
-    //Sys.println("DEBUG: PH_App.onLocationEvent()");
-    if(!$.PH_oSettings.bLocationAuto) {
+    //Sys.println("DEBUG: MyApp.onLocationEvent()");
+    if(!$.oMySettings.bLocationAuto) {
       return;  // should one have changed his mind while waiting for GPS fix
     }
     if(!(_oInfo has :position)) {
@@ -181,13 +181,13 @@ class PH_App extends App.AppBase {
     }
 
     // Save position
-    $.PH_oPositionLocation = _oInfo.position;
+    $.oMyPositionLocation = _oInfo.position;
 
     // Update almanac data
     var adLocation = _oInfo.position.toDegrees();
     var fLocationHeight = App.Properties.getValue("userLocationHeight");
-    var iEpochDate = $.PH_oSettings.bDateAuto ? Time.today().value() : App.Storage.getValue("storDatePreset");
-    var iEpochTime = $.PH_oSettings.bDateAuto ? Time.now().value() : null;
+    var iEpochDate = $.oMySettings.bDateAuto ? Time.today().value() : App.Storage.getValue("storDatePreset");
+    var iEpochTime = $.oMySettings.bDateAuto ? Time.now().value() : null;
     self.computeAlmanac(Ui.loadResource(Rez.Strings.valueLocationGPS), adLocation[0], adLocation[1], fLocationHeight, iEpochDate, iEpochTime);
 
     // Update UI
@@ -195,23 +195,23 @@ class PH_App extends App.AppBase {
   }
 
   function onUpdateTimer_init() {
-    //Sys.println("DEBUG: PH_App.onUpdateTimer_init()");
+    //Sys.println("DEBUG: MyApp.onUpdateTimer_init()");
     self.onUpdateTimer();
     self.oUpdateTimer = new Timer.Timer();
     self.oUpdateTimer.start(method(:onUpdateTimer), 60000, true);
   }
 
   function onUpdateTimer() {
-    //Sys.println("DEBUG: PH_App.onUpdateTimer()");
+    //Sys.println("DEBUG: MyApp.onUpdateTimer()");
     self.updateUi();
   }
 
   function updateUi() {
-    //Sys.println("DEBUG: PH_App.updateUi()");
+    //Sys.println("DEBUG: MyApp.updateUi()");
 
     // Update UI
-    if($.PH_oCurrentView != null) {
-      $.PH_oCurrentView.updateUi();
+    if($.oMyView != null) {
+      $.oMyView.updateUi();
     }
   }
 

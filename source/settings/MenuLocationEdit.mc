@@ -31,7 +31,7 @@ class MenuLocationEdit extends Ui.Menu {
     Menu.addItem(Ui.loadResource(Rez.Strings.titleLocationName), :menuLocationName);
     Menu.addItem(Ui.loadResource(Rez.Strings.titleLocationLatitude), :menuLocationLatitude);
     Menu.addItem(Ui.loadResource(Rez.Strings.titleLocationLongitude), :menuLocationLongitude);
-    if($.PH_oPositionLocation != null) {
+    if($.oMyPositionLocation != null) {
       Menu.addItem(Ui.loadResource(Rez.Strings.titleLocationFromGPS), :menuLocationFromGPS);
     }
   }
