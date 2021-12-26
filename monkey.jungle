@@ -2,19 +2,12 @@
 project.manifest = manifest.xml
 
 # Annotations
-# ... exclude all by default
-base.excludeAnnotations = memory_small;memory_large
+# ... exclude by default
+base.excludeAnnotations = memory_small
 # ... per (supported) device
-d2charlie.excludeAnnotations = memory_small
-d2delta.excludeAnnotations = memory_small
-d2deltapx.excludeAnnotations = memory_small
-d2deltas.excludeAnnotations = memory_small
-descentmk1.excludeAnnotations = memory_small
 fenix5.excludeAnnotations = memory_large
-fenix5plus.excludeAnnotations = memory_small
-fenix5splus.excludeAnnotations = memory_small
-fenix5x.excludeAnnotations = memory_small
-fenix5xplus.excludeAnnotations = memory_small
-fr935.excludeAnnotations = memory_large
+fenix6.excludeAnnotations = memory_large
+fenix6s.excludeAnnotations = memory_large
+fr245.excludeAnnotations = memory_large
 fr645.excludeAnnotations = memory_large
-fr645m.excludeAnnotations = memory_large
+fr935.excludeAnnotations = memory_large
