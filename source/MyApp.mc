@@ -124,7 +124,7 @@ class MyApp extends App.AppBase {
     }
     else {
       var dictLocation = App.Storage.getValue("storLocPreset") as Dictionary?;
-      var fLocationHeight = App.Properties.getValue("userLocationHeight") as Float?;
+      var fLocationHeight = $.oMySettings.loadLocationHeight();
       var iEpochToday = Time.today().value();
       var iEpochDate = $.oMySettings.bDateAuto ? iEpochToday : App.Storage.getValue("storDatePreset") as Number?;
       var iEpochTime = $.oMySettings.bDateAuto ? Time.now().value() : null;
@@ -132,7 +132,7 @@ class MyApp extends App.AppBase {
         self.computeAlmanac(dictLocation["name"] as String,
                             dictLocation["latitude"] as Double,
                             dictLocation["longitude"] as Double,
-                            fLocationHeight != null ? fLocationHeight : 0.0f,
+                            fLocationHeight,
                             iEpochDate != null ? iEpochDate : iEpochToday,
                             iEpochTime);
       }
@@ -188,13 +188,13 @@ class MyApp extends App.AppBase {
 
     // Update almanac data
     var adLocation = (_oInfo.position as Pos.Location).toDegrees();
-    var fLocationHeight = App.Properties.getValue("userLocationHeight") as Float?;
+    var fLocationHeight = $.oMySettings.loadLocationHeight();
     var iEpochToday = Time.today().value();
     var iEpochDate = $.oMySettings.bDateAuto ? iEpochToday : App.Storage.getValue("storDatePreset") as Number?;
     var iEpochTime = $.oMySettings.bDateAuto ? Time.now().value() : null;
     self.computeAlmanac(Ui.loadResource(Rez.Strings.valueLocationGPS) as String,
                         adLocation[0], adLocation[1],
-                        fLocationHeight != null ? fLocationHeight : 0.0f,
+                        fLocationHeight,
                         iEpochDate != null ? iEpochDate : iEpochToday,
                         iEpochTime);
 
