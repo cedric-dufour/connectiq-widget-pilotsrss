@@ -1,7 +1,7 @@
 <!-- -*- mode:xml; tab-width:2; c-basic-offset:2; intent-tabs-mode:nil; -*- ex: set tabstop=2 expandtab: -->
 <strings>
   <string id="AppName">Pilot SR/SS</string>
-  <string id="AppVersion">1.0.20220128a</string>
+  <string id="AppVersion">1.0.20220715a</string>
   <!-- Properties -->
   <string id="titleVersion">Version</string>
   <string id="titleLicense">License</string>
@@ -40,7 +40,7 @@
   <string id="valueColorBlack">Black</string>
   <!-- Layouts -->
   <string id="labelSunriseSunset">SR/SS</string>
-  <string id="labelCivilDawnDusk">Twilight</string>
+  <string id="labelCivilDawnDusk">Twilight (HR*)</string>
   <string id="labelLocation">Location</string>
   <string id="labelHeight">Height</string>
   <!-- Values -->

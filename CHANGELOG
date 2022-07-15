@@ -1,3 +1,7 @@
+* 1.0.20220715a:
+  - FIX: Crash after settings are edited in Garmin Connect
+  - NEW: add Glance view
+
 * 1.0.20220128a:
   - Added for Fenix 7 devices
 
