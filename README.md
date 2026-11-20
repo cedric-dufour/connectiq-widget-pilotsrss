@@ -1,5 +1,10 @@
 PilotSRSS (Garmin ConnectIQ) Widget
 ===================================
+
+> THIS PROJECT HAS MOVED TO https://codeberg.org/cedric-dufour/connectiq-widget-pilotsrss
+>
+> (and may vanish from GitHub with no further notice; please update your upstream URL)
+
 Pilot SR/SS/Twilight hours for Garmin ConnectIQ devices
 
 
